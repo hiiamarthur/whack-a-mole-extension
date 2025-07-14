@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      margin: 0 0 16px 0;
+      color: #333;
+      font-size: 18px;
+    }
+    
+    .upload-section {
+      margin-bottom: 20px;
+      padding: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    
+    .upload-section h3 {
+      margin: 0 0 12px 0;
+      color: #333;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .upload-section label {
+      display: block;
+      margin-bottom: 6px;
+      color: #555;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      margin-bottom: 12px;
+    }
+    
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 2px dashed #ddd;
+      border-radius: 4px;
+      background: #fafafa;
+      cursor: pointer;
+    }
+    
+    input[type="file"]:hover {
+      border-color: #007bff;
+    }
+    
+    .preview {
+      text-align: center;
+      margin: 12px 0;
+    }
+    
+    #preview-img {
+      max-width: 64px;
+      max-height: 64px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    button {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    
+    #set-cursor-btn {
+      background: #007bff;
+      color: white;
+    }
+    
+    #set-cursor-btn:hover:not(:disabled) {
+      background: #0056b3;
+    }
+    
+    #set-cursor-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    #reset-cursor-btn {
+      background: #6c757d;
+      color: white;
+    }
+    
+    #reset-cursor-btn:hover {
+      background: #545b62;
+    }
+    
+    #error-msg {
+      color: #dc3545;
+      font-size: 12px;
+      margin-top: 8px;
+      min-height: 16px;
+    }
+    
+    .score-section {
+      border-top: 1px solid #eee;
+      padding-top: 16px;
+    }
+    
+    .score-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .score-label {
+      color: #666;
+    }
+    
+    .score-value {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .status {
+      font-size: 12px;
+      color: #28a745;
+      margin-top: 8px;
+      text-align: center;
+    }
+    
+    .sound-section {
+      border-top: 1px solid #eee;
+      padding-top: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .sound-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .sound-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .sound-toggle input[type="checkbox"] {
+      display: none;
+    }
+    
+    .toggle-slider {
+      position: relative;
+      width: 40px;
+      height: 20px;
+      background: #ccc;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+    
+    .toggle-slider:before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+    
+    .sound-toggle input[type="checkbox"]:checked + .toggle-slider {
+      background: #007bff;
+    }
+    
+    .sound-toggle input[type="checkbox"]:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+    
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    
+    .volume-control label {
+      color: #555;
+      min-width: 50px;
+    }
+    
+    .volume-control input[type="range"] {
+      flex: 1;
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      outline: none;
+    }
+    
+    .volume-control input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #007bff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .volume-control input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #007bff;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+    
+    #volume-value {
+      min-width: 35px;
+      text-align: right;
+      color: #666;
+      font-size: 12px;
+    }
+    
+    .game-section {
+      border-top: 1px solid #eee;
+      padding-top: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .game-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .setting-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .setting-toggle input[type="checkbox"] {
+      display: none;
+    }
+    
+    .setting-toggle .toggle-slider {
+      position: relative;
+      width: 40px;
+      height: 20px;
+      background: #ccc;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+    
+    .setting-toggle .toggle-slider:before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+    
+    .setting-toggle input[type="checkbox"]:checked + .toggle-slider {
+      background: #28a745;
+    }
+    
+    .setting-toggle input[type="checkbox"]:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+    
+    .timeout-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    
+    .timeout-control label {
+      color: #555;
+      min-width: 70px;
+    }
+    
+    .timeout-control input[type="range"] {
+      flex: 1;
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      outline: none;
+    }
+    
+    .timeout-control input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #28a745;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .timeout-control input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #28a745;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+    
+    #timeout-value {
+      min-width: 35px;
+      text-align: right;
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Whack-a-Mole Settings</h2>
+    
+    <div class="upload-section">
+      <h3>Mole</h3>
+      <div class="file-input-wrapper">
+        <label for="mole-input">Mole Image:</label>
+        <input type="file" id="mole-input" accept="image/png, image/jpeg" />
+      </div>
+      
+      <div class="preview">
+        <img id="mole-preview" alt="Mole preview" />
+      </div>
+      
+      <div class="buttons">
+        <button id="set-mole-btn" disabled>Set Mole</button>
+      </div>
+      
+      <div id="mole-error-msg"></div>
+    </div>
+
+    <div class="upload-section">
+      <h3>Super Mole</h3>
+      <div class="file-input-wrapper">
+        <label for="super-mole-input">Super Mole Image:</label>
+        <input type="file" id="super-mole-input" accept="image/png, image/jpeg" />
+      </div>
+      
+      <div class="preview">
+        <img id="super-mole-preview" alt="Super mole preview" />
+      </div>
+      
+      <div class="buttons">
+        <button id="set-super-mole-btn" disabled>Set Super Mole</button>
+      </div>
+      
+      <div id="super-mole-error-msg"></div>
+    </div>
+
+    <div class="upload-section">
+      <h3>Bomb</h3>
+      <div class="file-input-wrapper">
+        <label for="bomb-input">Bomb Image:</label>
+        <input type="file" id="bomb-input" accept="image/png, image/jpeg" />
+      </div>
+      
+      <div class="preview">
+        <img id="bomb-preview" alt="Bomb preview" />
+      </div>
+      
+      <div class="buttons">
+        <button id="set-bomb-btn" disabled>Set Bomb</button>
+      </div>
+      
+      <div id="bomb-error-msg"></div>
+    </div>
+
+    <div class="buttons">
+      <button id="reset-cursor-btn">Reset All</button>
+    </div>
+
+    <div class="sound-section">
+      <h3>Sound Settings</h3>
+      <div class="sound-controls">
+        <label class="sound-toggle">
+          <input type="checkbox" id="sound-toggle" checked>
+          <span class="toggle-slider"></span>
+          Sound Effects
+        </label>
+        <div class="volume-control">
+          <label for="volume-slider">Volume:</label>
+          <input type="range" id="volume-slider" min="0" max="100" value="70">
+          <span id="volume-value">70%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-section">
+      <h3>Game Settings</h3>
+      <div class="game-controls">
+        <label class="setting-toggle">
+          <input type="checkbox" id="auto-close-toggle" checked>
+          <span class="toggle-slider"></span>
+          Auto-close when loading ends
+        </label>
+        <div class="timeout-control">
+          <label for="timeout-slider">Show delay:</label>
+          <input type="range" id="timeout-slider" min="0" max="5" step="0.5" value="2">
+          <span id="timeout-value">2.0s</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="score-section">
+      <div class="score-item">
+        <span class="score-label">Highest Score:</span>
+        <span class="score-value" id="highest-score">0</span>
+      </div>
+      <div class="score-item">
+        <span class="score-label">Current Score:</span>
+        <span class="score-value" id="current-score">0</span>
+      </div>
+    </div>
+    
+    <div class="status" id="status-msg"></div>
+  </div>
+
+  <script src="shared-state.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html> 

@@ -1,0 +1,197 @@
+body {
+    margin: 0;
+    background: #f8f8f8;
+    font-family: sans-serif;
+    perspective: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    cursor: url('images/minimal-hammer-pointer.png'), auto;
+    background-color: #111;
+    background-image:
+      linear-gradient(to right, rgba(0,255,255,0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,255,255,0.1) 1px, transparent 1px);
+    background-size: 120px 120px;
+    backdrop-filter: blur(4px);
+    width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  /* Global hammer cursor for clickable elements */
+  * {
+    cursor: url('images/minimal-hammer-pointer.png'), auto;
+  }
+  
+  /* Global hammer cursor for active clicking - rotated version */
+  *:active {
+    cursor: url('images/minimal-hammer-pointer-clicked.png'), pointer;
+  }
+  
+  /* Add click animation for hammer effect */
+  * {
+    transition: cursor 0.1s ease;
+  }
+  
+  
+  #background {
+    background-image: url('images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: rotateX(60deg);
+
+
+   
+  }
+  
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 15px;
+    padding: 60px;
+    /* transform: rotateX(60deg); */
+    transform-style: preserve-3d;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .hole {
+    /* background-color: #ddd; */
+    border-radius: 10px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+  
+  .hole:hover {
+    transform: translateZ(5px);
+  }
+  
+  .mole {
+    min-width: 60px;
+    min-height: 60px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    animation: popUp 0.5s ease-out;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+  }
+  
+  .mole:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Pop up animation for moles */
+  @keyframes popUp {
+    0% {
+      transform: translateY(100px) scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(-10px) scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Super mole styling */
+  .super-mole {
+    background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.5) !important;
+    border: 2px solid #c0392b;
+    animation: popUpSuper 0.6s ease-out !important;
+  }
+  
+  .super-mole:hover {
+    transform: scale(1.2) !important;
+    box-shadow: 0 6px 16px rgba(231, 76, 60, 0.7) !important;
+  }
+  
+  /* Super mole pop up animation */
+  @keyframes popUpSuper {
+    0% {
+      transform: translateY(100px) scale(0.6);
+      opacity: 0;
+    }
+    40% {
+      transform: translateY(-15px) scale(1.2);
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(5px) scale(0.95);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Bomb mole styling */
+  .bomb-mole {
+    background: linear-gradient(45deg, #34495e, #2c3e50) !important;
+    box-shadow: 0 4px 12px rgba(52, 73, 94, 0.5) !important;
+    border: 2px solid #2c3e50;
+    animation: popUpBomb 0.7s ease-out !important;
+  }
+  
+  .bomb-mole:hover {
+    transform: scale(1.15) !important;
+    box-shadow: 0 6px 16px rgba(52, 73, 94, 0.7) !important;
+  }
+  
+  /* Bomb mole pop up animation */
+  @keyframes popUpBomb {
+    0% {
+      transform: translateY(100px) scale(0.7);
+      opacity: 0;
+    }
+    60% {
+      transform: translateY(-20px) scale(1.3);
+      opacity: 1;
+    }
+    80% {
+      transform: translateY(8px) scale(0.9);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Points animation styling - flat on screen */
+  .points-animation {
+    position: fixed !important;
+    z-index: 1000;
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    animation: fadeUpFlat 1.5s ease-out forwards;
+  }
+  
+  @keyframes fadeUpFlat {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+  }

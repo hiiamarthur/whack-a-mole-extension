@@ -1,0 +1,29 @@
+{
+    "name": "ai-whack",
+    "displayName": "AI Whack",
+    "description": "Play a whack-a-mole game while waiting for AI to respond in VS Code.",
+    "version": "0.0.1",
+    "engines": {
+      "vscode": "^1.70.0"
+    },
+    "activationEvents": ["onCommand:aiWhack.startGame"],
+    "main": "./out/extension.js",
+    "contributes": {
+      "commands": [
+        {
+          "command": "aiWhack.startGame",
+          "title": "Start Whack-A-Mole Game"
+        }
+      ]
+    },
+    "scripts": {
+      "compile": "tsc -p ./",
+      "watch": "tsc -w",
+      "package": "vsce package"
+    },
+    "devDependencies": {
+      "@types/vscode": "^1.70.0",
+      "typescript": "^5.3.3",
+      "vsce": "^3.12.1"
+    }
+  }
