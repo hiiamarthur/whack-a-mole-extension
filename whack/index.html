@@ -4,10 +4,16 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+ 
     <div id="scoreboard"
-      style="text-align: center; font-size: 20px; font-weight: bold; color: white; position: fixed; top: 10px; left: 10px; right: 10px; z-index: 1000;">
-      Highest Score: <span id="highest-score">0</span>
-      Current Score: <span id="score">0</span>
+      style="text-align: center; font-size: 20px; font-weight: bold; color: white; z-index: 1000; display: flex; justify-content: space-between; flex-direction: column;">
+      <span>Highest Score: <span id="highest-score">0</span></span>
+      <span>Current Score: <span id="score">0</span></span>
+    </div>
+    <div id="score-info">
+      <span><img id="mole-score" class="score-icon"> = +1 </span>
+      <span><img id="super-mole-score" class="score-icon"> = +2 </span>
+      <span><img id="bomb-score" class="score-icon"> = -1 </span>
     </div>
     <div id="background"> <div id="grid"></div></div>
  

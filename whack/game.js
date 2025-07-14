@@ -1,5 +1,6 @@
 const grid = document.getElementById('grid');
 
+
 for (let i = 0; i < 9; i++) {
   const hole = document.createElement('div');
   hole.className = 'hole';

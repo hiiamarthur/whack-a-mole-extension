@@ -1,22 +1,32 @@
 const highestScoreEl = document.getElementById('highest-score');
 const currentScoreEl = document.getElementById('current-score');
 
+const moleScoreEl = document.getElementById('mole-score');
+const superMoleScoreEl = document.getElementById('super-mole-score');
+const bombScoreEl = document.getElementById('bomb-score');
+
 const MAX_SIZE = 64;
 let customCursorUrl = null;
 
 // Wait for shared state to be ready
 let sharedStateReady = false;
 
+async function init(){
+  await initSharedState();
+  moleScoreEl.src = window.customMoleUrl?? localStorage.getItem('customMole') ?? 'icons/bug-solid.svg';
+  superMoleScoreEl.src = window.customSuperMoleUrl ?? localStorage.getItem('customSuperMole') ?? 'icons/xmark-solid.svg';
+  bombScoreEl.src = window.customBombUrl ?? localStorage.getItem('customBomb') ?? 'icons/mug-hot-solid.svg';
+}
 // Initialize shared state
 async function initSharedState() {
   if (window.sharedState) {
     await window.sharedState.init();
     sharedStateReady = true;
-    loadCache();
+    await loadCache();
   } else {
     // Fallback to localStorage if shared state not available
     console.warn('Shared state not available, falling back to localStorage');
-    loadCache();
+    await loadCache();
   }
 }
 
@@ -144,6 +154,4 @@ async function updateScore(newScore) {
 }
 
 
-
-
-initSharedState();
+init();
