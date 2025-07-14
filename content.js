@@ -35,7 +35,7 @@
   
     const interval = setInterval(() => {
       // Get all avatar elements and find the most recent one
-      const avatars = document.querySelectorAll('[data-test-lottie-animation-status]');
+      const avatar = document.querySelector('.avatar_spinner_animation');
       let latestStatus = null;
       
       // Strategy 1: Look for the most recent avatar by checking visibility and position
@@ -53,7 +53,7 @@
       }
       
       // Strategy 2: If no visible avatar found, try to find the last one in the conversation
-      if (!latestStatus && avatars.length > 0) {
+      if (!latestStatus && avatar) {
         // Look for avatars within the conversation container
         const conversationContainer = document.querySelector('[data-testid="conversation-turn"]') || 
                                     document.querySelector('.conversation-container') ||
