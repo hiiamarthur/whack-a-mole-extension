@@ -1,4 +1,4 @@
-# 🧠 Prompt Hammer Intallation Guide
+# 🧠 Prompt Pounder Intallation Guide
 
 **Whack-a-Mole for AI Prompt Wait Times** — A lightweight Chrome extension that activates a fun mini-game when you're waiting for AI-generated responses (like ChatGPT or Gemini), helping you stay focused instead of switching to distractions like social media.
 
