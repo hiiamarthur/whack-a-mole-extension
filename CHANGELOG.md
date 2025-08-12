@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-08-11
+### Add
+- Support for Gemini AI loading
+### Change
+- Change logic for closing the popup to waiting after the prompt ends 
+- Change Image for mole to fit better user preference 
+
 ## [1.1.0] – 2025-07-17
 ### Added
 - Support for ChatGPT AI waiting state via `.result-thinking` detection.
