@@ -59,12 +59,14 @@
 
   function setupGemini() {
     console.log("🔍 Gemini watcher running...");
-  
+    const container = document.querySelector('#thread') || document.body;
     let waiting = false;
-  
-    const interval = setInterval(() => {
+    let isThinking = false;
+    // const interval = setInterval(() => {
+      const observer = new MutationObserver(() => {
+      
       // Get all avatar elements and find the most recent one
-      const avatar = document.querySelector('.avatar_spinner_animation');
+      const avatars = document.querySelectorAll('.avatar_spinner_animation');
       let latestStatus = null;
       
       // Strategy 1: Look for the most recent avatar by checking visibility and position
@@ -82,24 +84,26 @@
       }
       
       // Strategy 2: If no visible avatar found, try to find the last one in the conversation
-      if (!latestStatus && avatar) {
-        // Look for avatars within the conversation container
-        const conversationContainer = document.querySelector('[data-testid="conversation-turn"]') || 
-                                    document.querySelector('.conversation-container') ||
-                                    document.body;
+      // if (!latestStatus && avatar) {
+      //   // Look for avatars within the conversation container
+      //   const conversationContainer = document.querySelector('[data-testid="conversation-turn"]') || 
+      //                               document.querySelector('.conversation-container') ||
+      //                               document.body;
         
-        const conversationAvatars = conversationContainer.querySelectorAll('[data-test-lottie-animation-status]');
-        if (conversationAvatars.length > 0) {
-          latestStatus = conversationAvatars[conversationAvatars.length - 1].getAttribute('data-test-lottie-animation-status');
-        }
-      }
+      //   const conversationAvatars = conversationContainer.querySelectorAll('[data-test-lottie-animation-status]');
+      //   if (conversationAvatars.length > 0) {
+      //     latestStatus = conversationAvatars[conversationAvatars.length - 1].getAttribute('data-test-lottie-animation-status');
+      //   }
+      // }
       
       // Strategy 3: Fallback to the last avatar in the entire document
       if (!latestStatus && avatars.length > 0) {
         latestStatus = avatars[avatars.length - 1].getAttribute('data-test-lottie-animation-status');
       }
       
-      const spinner = document.querySelector('.avatar_spinner_animation');
+      const spinners = document.querySelectorAll('.avatar_spinner_animation');
+
+      const lastestSpinner = spinners[spinners.length - 1]
       
       const isStatusThinking = latestStatus !== 'completed';
       console.log('🤖 Gemini status:', latestStatus, isStatusThinking, 
@@ -108,14 +112,14 @@
                     const rect = a.getBoundingClientRect();
                     return rect.width > 0 && rect.height > 0;
                   }).length,
-                  spinner ? getComputedStyle(spinner).opacity : 'no-spinner',
-                  spinner ? getComputedStyle(spinner).visibility : 'no-spinner');
+                  lastestSpinner ? getComputedStyle(lastestSpinner).opacity : 'no-spinner',
+                  lastestSpinner ? getComputedStyle(lastestSpinner).visibility : 'no-spinner',isThinking,waiting);
       
-      const isSpinnerVisible = spinner &&
-        getComputedStyle(spinner).opacity !== '0' &&
-        getComputedStyle(spinner).visibility !== 'hidden';
+      const isSpinnerVisible = lastestSpinner && 
+      getComputedStyle(lastestSpinner).opacity === '1' &&
+        getComputedStyle(lastestSpinner).visibility === 'visible';
   
-      const isThinking = isStatusThinking || isSpinnerVisible;
+      isThinking = isSpinnerVisible;
   
       if (isThinking && !waiting) {
         waiting = true;
@@ -126,6 +130,9 @@
         console.log("✅ Gemini finished — hide game");
         chrome.runtime.sendMessage({ type: "closeGameWindow" });
       }
-    }, 300);
+    });
+
+    observer.observe(container, { childList: true, subtree: true });
+    // }, 300);
   }
 })();

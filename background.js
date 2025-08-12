@@ -1,4 +1,5 @@
 let gameWindowId = null;
+let pendingOpenTimeout = null;
 let gameSettings = {
   autoClose: true,
   timeout: 2.0
@@ -13,20 +14,43 @@ chrome.storage.local.get(['gameSettings'], (result) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "openGameWindow") {
-    if (!gameWindowId) {
-      // Add timeout delay before opening window
-      setTimeout(() => {
-        chrome.windows.create({
-          url: chrome.runtime.getURL("whack/index.html"),
-          type: "popup",
-          width: 600,
-          height: 600
-        }, (newWindow) => {
-          gameWindowId = newWindow.id;
-        });
-      }, gameSettings.timeout * 1000);
+    if (pendingOpenTimeout) {
+      clearTimeout(pendingOpenTimeout);
+      pendingOpenTimeout = null;
+    }
+
+    const openNewWindow = () => {
+      chrome.windows.create({
+        url: chrome.runtime.getURL("whack/index.html"),
+        type: "popup",
+        width: 600,
+        height: 600
+      }, (newWindow) => {
+        gameWindowId = newWindow.id;
+      });
+    };
+
+    if (gameWindowId) {
+      // Close existing window first, then open new one after removal completes
+      chrome.windows.remove(gameWindowId, () => {
+        gameWindowId = null;
+        // Open new window after small delay to ensure cleanup
+        setTimeout(() => {
+          openNewWindow();
+        }, 100);
+      });
+    } else {
+      // No window open, just open after timeout
+      pendingOpenTimeout = setTimeout(() => {
+        openNewWindow();
+        pendingOpenTimeout = null;
+      }, (gameSettings.timeout || 0) * 1000);
     }
   }
+
+  
+
+
   if(message.type === "closeGameWindow") {
     if(gameWindowId && gameSettings.autoClose) {
       chrome.windows.remove(gameWindowId);
