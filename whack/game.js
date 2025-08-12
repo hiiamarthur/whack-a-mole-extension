@@ -54,7 +54,7 @@ async function showMole() {
     case 'super':
       mole.classList.add('super-mole');
       mole.style.backgroundColor = '#e74c3c'; // Red color for super mole
-      let superMoleUrl = 'icons/xmark-solid.svg';
+      let superMoleUrl = 'icons/mouse-solid.svg';
       let localSupermole = localStorage.getItem('customSuperMole');
    
       if(window.sharedState && window.customSuperMoleUrl) {
@@ -70,7 +70,7 @@ async function showMole() {
     case 'bomb':
       mole.classList.add('bomb-mole');
       mole.style.backgroundColor = '#green'; // Dark gray for bomb mole
-      let bombUrl = 'icons/mug-hot-solid.svg';
+      let bombUrl = 'icons/bomb-solid.svg';
       let localBomb = localStorage.getItem('customBomb');
       if(window.sharedState && window.customBombUrl) {
         bombUrl = window.customBombUrl; 
@@ -82,7 +82,7 @@ async function showMole() {
       break;
     default:
       mole.style.backgroundColor = 'orange';
-      let moleUrl = 'icons/bug-solid.svg';
+      let moleUrl = 'icons/mole-solid.svg';
       let localMole = localStorage.getItem('customMole');
       if(window.sharedState && window.customMoleUrl) {
         moleUrl = window.customMoleUrl; 

@@ -13,9 +13,9 @@ let sharedStateReady = false;
 
 async function init(){
   await initSharedState();
-  moleScoreEl.src = window.customMoleUrl?? localStorage.getItem('customMole') ?? 'icons/bug-solid.svg';
-  superMoleScoreEl.src = window.customSuperMoleUrl ?? localStorage.getItem('customSuperMole') ?? 'icons/xmark-solid.svg';
-  bombScoreEl.src = window.customBombUrl ?? localStorage.getItem('customBomb') ?? 'icons/mug-hot-solid.svg';
+  moleScoreEl.src = window.customMoleUrl?? localStorage.getItem('customMole') ?? 'icons/mole-solid.svg';
+  superMoleScoreEl.src = window.customSuperMoleUrl ?? localStorage.getItem('customSuperMole') ?? 'icons/mouse-solid.svg';
+  bombScoreEl.src = window.customBombUrl ?? localStorage.getItem('customBomb') ?? 'icons/bomb-solid.svg';
 }
 // Initialize shared state
 async function initSharedState() {

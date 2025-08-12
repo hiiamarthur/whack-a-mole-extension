@@ -38,7 +38,7 @@
 //     console.log('Message turn still loading or inactive:', btn);
 //   }
 // });
-      if (thinking && !loadingPrompt) {
+      if (thinking && !loadingPrompt && !waitingPromptEnd) {
         loadingPrompt = true;
         console.log('⏳ ChatGPT is thinking');
         chrome.runtime.sendMessage({ type: "openGameWindow" });
