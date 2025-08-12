@@ -9,24 +9,53 @@
     console.log("Unsupported host:", host);
   }
 
+
   function setupChatGPT() {
     console.log("🧠 Injected into ChatGPT");
 
-    let waiting = false;
-    const interval = setInterval(() => {
+    const container = document.querySelector('#thread'); // adjust to static root
+
+    let loadingPrompt = false;
+    let waitingPromptEnd = false;
+    let promptFinish = false;
+    let button = null;
+    // const interval = setInterval(() => {
+    const observer = new MutationObserver(() => {
       const thinking = document.querySelector('.result-thinking');
 
-      if (thinking && !waiting) {
-        waiting = true;
+      const buttons = document.querySelectorAll('button[data-testid="good-response-turn-action-button"]');
+      const latestButton = buttons[buttons.length - 1];
+      if (latestButton && latestButton != button) {
+        
+        button = latestButton;
+        if(waitingPromptEnd) promptFinish = true;
+        // You can trigger any action here
+      }
+// copyButtons.forEach(btn => {
+//   if (btn.getAttribute('data-state') === 'open') {
+//     console.log('Message turn is fully rendered and copy button active:', btn);
+//   } else {
+//     console.log('Message turn still loading or inactive:', btn);
+//   }
+// });
+      if (thinking && !loadingPrompt) {
+        loadingPrompt = true;
         console.log('⏳ ChatGPT is thinking');
         chrome.runtime.sendMessage({ type: "openGameWindow" });
-      } else if (!thinking && waiting) {
-        waiting = false;
-        console.log('✅ ChatGPT finished');
-        chrome.runtime.sendMessage({ type: "closeGameWindow" });
+      } else if (!thinking && loadingPrompt) {
+        loadingPrompt = false;
+        console.log('✅ ChatGPT done thinking');
+        waitingPromptEnd = true;
+      }else if(waitingPromptEnd && promptFinish){
+        promptFinish = false;
+        waitingPromptEnd = false;
+        console.log('✅ ChatGPT prompt finished');
+        chrome.runtime.sendMessage({type: "closeGameWindow"})
       }
-    }, 500);
+    });
+    observer.observe(container, { childList: true, subtree: true });
   }
+    // }, 500);
 
   function setupGemini() {
     console.log("🔍 Gemini watcher running...");
